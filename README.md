@@ -19,7 +19,7 @@
    python demo.py
 ```
 
-#Dependencies
+# Dependencies
 
 The code is compatible with Python 2.7 and 3. The following dependencies are needed to run the tracker:
 
@@ -29,7 +29,7 @@ The code is compatible with Python 2.7 and 3. The following dependencies are nee
 
 Additionally, feature generation requires TensorFlow-1.4.0.
 
-#Note 
+# Note 
  file model_data/mars-small128.pb  had convert to tensorflow-1.4.0
  file model_data/yolo.h5 is to large to upload ,so you need convert it from Darknet Yolo model to a keras model by yourself
  
