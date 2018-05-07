@@ -1,14 +1,11 @@
-# keras-yolo3
 
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
-
-## Introduction
+# Introduction
 
   https://github.com/nwojke/deep_sort
   
   https://github.com/qqwweee/keras-yolo3
 
-## Quick Start
+# Quick Start
 
 1. Download YOLOv3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/).
 2. Convert the Darknet YOLO model to a Keras model.
