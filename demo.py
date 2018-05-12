@@ -37,7 +37,9 @@ def main(yolo):
     video_capture = cv2.VideoCapture(0)
     fps = 0.0
     while True:
-        _, frame = video_capture.read()  # frame shape 640*480*3
+        ret, frame = video_capture.read()  # frame shape 640*480*3
+        if ret != True:
+           break;
         t1 = time.time()
 
         image = Image.fromarray(frame)
