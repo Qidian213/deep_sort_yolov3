@@ -60,15 +60,18 @@ def main(yolo):
         tracker.predict()
         tracker.update(detections)
         
-        for track,det in zip(tracker.tracks,detections):
-            if track.is_confirmed() and track.time_since_update <=0:
-                bbox = track.to_tlbr()
-                cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,255,255), 4)
+        for track in tracker.tracks:
+            if track.is_confirmed() and track.time_since_update >1 :
+                continue 
+            bbox = track.to_tlbr()
+            cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,255,255), 4)
+            cv2.putText(frame, str(track.track_id),(int(bbox[0]), int(bbox[1])),0, 5e-3 * 200, (124,252,0),2)
+
+        for det in detections:
             bbox = det.to_tlbr()
-            cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,0,0), 4)
-            cv2.putText(frame, str(track.track_id),(int(bbox[0]), int(bbox[1])),0, 5e-3 * 480, (124,252,0),4)
+            cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,0,0), 4)    
         cv2.imshow('', frame)
-        
+      
         fps  = ( fps + (1./(time.time()-t1)) ) / 2
         print("fps= %f"%(fps))
         
