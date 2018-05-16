@@ -37,7 +37,7 @@ Additionally, feature generation requires TensorFlow-1.4.0.
  
  speed : when only run yolo detection about 11-13 fps  , after add deep_sort about 11.5 fps
  
- test video : https://www.bilibili.com/video/av23487422
+ test video : https://www.bilibili.com/video/av23500163/
  
 
 
