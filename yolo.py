@@ -105,6 +105,12 @@ class YOLO(object):
             y = int(box[0])  
             w = int(box[3]-box[1])
             h = int(box[2]-box[0])
+            if x < 0 :
+                w = w + x
+                x = 0
+            if y < 0 :
+                h = h + y
+                y = 0
             return_boxs.append([x,y,w,h])
 
         return return_boxs
