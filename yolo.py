@@ -110,7 +110,7 @@ class YOLO(object):
                 x = 0
             if y < 0 :
                 h = h + y
-                y = 0
+                y = 0 
             return_boxs.append([x,y,w,h])
 
         return return_boxs
