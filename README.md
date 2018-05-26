@@ -39,7 +39,7 @@ Additionally, feature generation requires TensorFlow-1.4.0.
  
  test video : https://www.bilibili.com/video/av23500163/
  
- From the test https://github.com/Qidian213/deep_sort_yolov3/issues/7 , it can tracks cars, birds and trucks too and performs well .
+ From the issue https://github.com/Qidian213/deep_sort_yolov3/issues/7 , it can tracks cars, birds and trucks too and performs well .
 
 
 
