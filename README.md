@@ -32,6 +32,8 @@ Additionally, feature generation requires TensorFlow-1.4.0.
  
  file model_data/yolo.h5 is to large to upload ,so you need convert it from Darknet Yolo model to a keras model by yourself
  
+ yolo.h5 model can download from https://drive.google.com/file/d/1uvXFacPnrSMw6ldWTyLLjGLETlEsUvcE/view?usp=sharing , use tensorflow1.4.0
+ 
 # Test
  use : 'video_capture = cv2.VideoCapture('path to video')' use a video file or 'video_capture = cv2.VideoCapture(0)' use camera
  
