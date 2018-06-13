@@ -66,6 +66,7 @@ class Track:
     def __init__(self, mean, covariance, track_id, n_init, max_age,
                  feature=None):
         self.mean = mean
+        self.prev_mean = None
         self.covariance = covariance
         self.track_id = track_id
         self.hits = 1
@@ -80,7 +81,7 @@ class Track:
         self._n_init = n_init
         self._max_age = max_age
 
-    def to_tlwh(self):
+    def to_tlwh(self, mean=None):
         """Get current position in bounding box format `(top left x, top left y,
         width, height)`.
 
@@ -90,12 +91,13 @@ class Track:
             The bounding box.
 
         """
-        ret = self.mean[:4].copy()
+        mean = mean is None and mean or self.mean
+        ret = mean[:4].copy()
         ret[2] *= ret[3]
         ret[:2] -= ret[2:] / 2
         return ret
 
-    def to_tlbr(self):
+    def to_tlbr(self, mean=None):
         """Get current position in bounding box format `(min x, miny, max x,
         max y)`.
 
@@ -105,7 +107,8 @@ class Track:
             The bounding box.
 
         """
-        ret = self.to_tlwh()
+        mean = mean is None and mean or self.mean
+        ret = self.to_tlwh(mean)
         ret[2:] = ret[:2] + ret[2:]
         return ret
 
@@ -135,6 +138,7 @@ class Track:
             The associated detection.
 
         """
+        self.prev_mean = self.mean
         self.mean, self.covariance = kf.update(
             self.mean, self.covariance, detection.to_xyah())
         self.features.append(detection.feature)

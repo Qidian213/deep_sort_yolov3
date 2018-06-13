@@ -6,7 +6,6 @@ import numpy as np
 import cv2
 import tensorflow as tf
 
-
 def _run_in_batches(f, data_dict, out, batch_size):
     data_len = len(out)
     num_batches = int(data_len / batch_size)
@@ -71,8 +70,8 @@ def extract_image_patch(image, bbox, patch_shape):
 class ImageEncoder(object):
 
     def __init__(self, checkpoint_filename, input_name="images",
-                 output_name="features"):
-        self.session = tf.Session()
+                 output_name="features", session=tf.Session()):
+        self.session = session
         with tf.gfile.GFile(checkpoint_filename, "rb") as file_handle:
             graph_def = tf.GraphDef()
             graph_def.ParseFromString(file_handle.read())
@@ -96,8 +95,8 @@ class ImageEncoder(object):
 
 
 def create_box_encoder(model_filename, input_name="images",
-                       output_name="features", batch_size=32):
-    image_encoder = ImageEncoder(model_filename, input_name, output_name)
+                       output_name="features", batch_size=32, session=tf.Session()):
+    image_encoder = ImageEncoder(model_filename, input_name, output_name, session)
     image_shape = image_encoder.image_shape
 
     def encoder(image, boxes):
