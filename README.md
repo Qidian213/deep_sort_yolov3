@@ -10,16 +10,17 @@ Thanks for these projects, this work now is support tiny_yolo v3 but only for te
 
 # Quick Start
 
-1. Download YOLOv3 or tiny_yolov3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/).
-2. Convert the Darknet YOLO model to a Keras model.
-3. Run YOLO_DEEP_SORT 
+1. Download YOLOv3 or tiny_yolov3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/).Then convert the Darknet YOLO model to a Keras model. Or use what i had converted https://drive.google.com/file/d/1uvXFacPnrSMw6ldWTyLLjGLETlEsUvcE/view?usp=sharing (yolo.h5 model file with tf-1.4.0) , put it into model_data folder
+2. Run YOLO_DEEP_SORT with cmd :
+   ```
+   python demo.py
+   ```
 
-The following three steps, you can change accordingly:
+3. (Optional) Convert the Darknet YOLO model to a Keras model by yourself:
 
 ```
-   please download the weights at first from yolo website or use your own weights. 
+   please download the weights at first from yolo website. 
    python convert.py yolov3.cfg yolov3.weights model_data/yolo.h5
-   python demo.py
 ```
 
 # Dependencies
@@ -34,11 +35,7 @@ Additionally, feature generation requires TensorFlow-1.4.0.
 
 # Note 
 
- file model_data/mars-small128.pb  had convert to tensorflow-1.4.0
- 
- file model_data/yolo.h5 is to large to upload ,so you need convert it from Darknet Yolo model to a keras model by yourself
- 
- yolo.h5 model can download from https://drive.google.com/file/d/1uvXFacPnrSMw6ldWTyLLjGLETlEsUvcE/view?usp=sharing , use tensorflow1.4.0
+  Model file model_data/mars-small128.pb need by deep_sort had convert to tensorflow-1.4.0
  
 # Test only
 
