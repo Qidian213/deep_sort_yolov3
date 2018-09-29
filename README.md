@@ -1,6 +1,6 @@
 
 # Introduction
-Thanks for these projects, this work now is support tiny_yolo v3 but only for test, if you want to train you can either train a model in darknet or in the second following works. It also can tracks many objects in coco classes, so please note to modify the classes in yolo.py. besides, you also can use camera for testing.
+  Thanks for these projects, this work now is support tiny_yolo v3 but only for test, if you want to train you can either train a model in darknet or in the second following works. It also can tracks many objects in coco classes, so please note to modify the classes in yolo.py. besides, you also can use camera for testing.
 
   https://github.com/nwojke/deep_sort
   
@@ -18,20 +18,20 @@ Thanks for these projects, this work now is support tiny_yolo v3 but only for te
 
 3. (Optional) Convert the Darknet YOLO model to a Keras model by yourself:
 
-```
+  ```
    please download the weights at first from yolo website. 
    python convert.py yolov3.cfg yolov3.weights model_data/yolo.h5
-```
+  ```
 
 # Dependencies
 
-The code is compatible with Python 2.7 and 3. The following dependencies are needed to run the tracker:
+  The code is compatible with Python 2.7 and 3. The following dependencies are needed to run the tracker:
 
     NumPy
     sklean
     OpenCV
 
-Additionally, feature generation requires TensorFlow-1.4.0.
+  Additionally, feature generation requires TensorFlow-1.4.0.
 
 # Note 
 
@@ -39,8 +39,8 @@ Additionally, feature generation requires TensorFlow-1.4.0.
  
 # Test only
 
- speed : when only run yolo detection about 11-13 fps  , after add deep_sort about 11.5 fps
+  Speed : when only run yolo detection about 11-13 fps  , after add deep_sort about 11.5 fps (GTX1060 6G)
  
- test video : https://www.bilibili.com/video/av23500163/
+  Test video : https://www.bilibili.com/video/av23500163/
  
 
