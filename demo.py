@@ -73,7 +73,7 @@ def main(yolo):
         tracker.update(detections)
         
         for track in tracker.tracks:
-            if track.is_confirmed() and track.time_since_update >1 :
+            if not track.is_confirmed() or track.time_since_update > 1:
                 continue 
             bbox = track.to_tlbr()
             cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,255,255), 2)
