@@ -39,9 +39,11 @@ QQ group: 姿态检测＆跟踪 781184396
   To train the deep association metric model on your datasets you can reference to https://github.com/nwojke/cosine_metric_learning  approach which is provided as a separate repository.
   
   Be careful that the code ignores everything but person. For your task do not forget to change :
+  
   [deep_sort_yolov3/yolo.py] Lines 100 to 101 
   
    if predicted_class != 'person' : 
+   
          continue 
   
 # Note 
