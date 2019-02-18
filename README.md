@@ -37,6 +37,9 @@ QQ group: 姿态检测＆跟踪 781184396
 # Training the model
 
   To train the deep association metric model on your datasets you can reference to https://github.com/nwojke/cosine_metric_learning  approach which is provided as a separate repository.
+  Be careful that the code ignores everything but person. For your task do not forget to change :
+  [deep_sort_yolov3/yolo.py](https://github.com/Qidian213/deep_sort_yolov3/blob/c0a82cab0d0777432a9f1cd43ef0ba0d703f836d/yolo.py#L100-L101)
+  Lines 100 to 101 in [c0a82ca](/Qidian213/deep_sort_yolov3/commit/c0a82cab0d0777432a9f1cd43ef0ba0d703f836d)
   
 # Note 
 
