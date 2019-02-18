@@ -40,12 +40,11 @@ QQ group: 姿态检测＆跟踪 781184396
   
   Be careful that the code ignores everything but person. For your task do not forget to change :
   
-  [deep_sort_yolov3/yolo.py] Lines 100 to 101 
+  [deep_sort_yolov3/yolo.py]   Lines 100 to 101 :
   
-   if predicted_class != 'person' : 
-   
-         continue 
-  
+          if predicted_class != 'person' : 
+               continue 
+
 # Note 
 
   Model file model_data/mars-small128.pb need by deep_sort had convert to tensorflow-1.4.0
