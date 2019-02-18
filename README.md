@@ -34,6 +34,10 @@ QQ group: 姿态检测＆跟踪 781184396
 
   Additionally, feature generation requires TensorFlow-1.4.0.
 
+# Training the model
+
+  To train the deep association metric model on your datasets you can reference to https://github.com/nwojke/cosine_metric_learning  approach which is provided as a separate repository.
+  
 # Note 
 
   Model file model_data/mars-small128.pb need by deep_sort had convert to tensorflow-1.4.0
