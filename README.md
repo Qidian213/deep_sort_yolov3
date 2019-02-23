@@ -31,6 +31,7 @@ QQ group: 姿态检测＆跟踪 781184396
     NumPy
     sklean
     OpenCV
+    Pillow
 
   Additionally, feature generation requires TensorFlow-1.4.0.
 
