@@ -54,7 +54,8 @@ def main(yolo):
             break
         t1 = time.time()
 
-        image = Image.fromarray(frame)
+       # image = Image.fromarray(frame)
+        image = Image.fromarray(frame[...,::-1]) #bgr to rgb
         boxs = yolo.detect_image(image)
        # print("box_num",len(boxs))
         features = encoder(frame,boxs)
