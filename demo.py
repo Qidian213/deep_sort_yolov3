@@ -51,7 +51,7 @@ def main(yolo):
     while True:
         ret, frame = video_capture.read()  # frame shape 640*480*3
         if ret != True:
-            break;
+            break
         t1 = time.time()
 
         image = Image.fromarray(frame)
