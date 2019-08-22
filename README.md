@@ -50,6 +50,8 @@ QQ group: 姿态检测＆跟踪 781184396
   You can use any Detector you like to replace Keras_version YOLO to get bboxes , for it is to slow !
   
   Model file model_data/mars-small128.pb need by deep_sort had convert to tensorflow-1.4.0
+  
+  Deep sort 程序结构见 “model_data/DeepSORT”，如有错误欢迎联系修改。
  
 # Test only
 
