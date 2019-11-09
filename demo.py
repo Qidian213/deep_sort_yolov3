@@ -36,7 +36,8 @@ def main(yolo):
 
     writeVideo_flag = True 
     
-    video_capture = cv2.VideoCapture(0)
+    video_capture = cv2.VideoCapture('./training_set/MOT16-08.mp4')
+    #video_capture = cv2.VideoCapture(0)
 
     if writeVideo_flag:
     # Define the codec and create VideoWriter object
