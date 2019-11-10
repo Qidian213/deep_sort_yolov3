@@ -1,6 +1,3 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from __future__ import division, print_function, absolute_import
 
 import os
@@ -18,9 +15,25 @@ from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
 from tools import generate_detections as gdet
 from deep_sort.detection import Detection as ddet
-warnings.filterwarnings('ignore')
+#warnings.filterwarnings('ignore')
 
-def main(yolo):
+import argparse
+
+def parse_args():
+    """ Parse command line arguments.
+    """
+    parser = argparse.ArgumentParser(description="Deep SORT")
+    parser.add_argument(
+        "--sequence_file", help="Path to input sequence",
+        default=0)
+    parser.add_argument(
+        "--output_dir", help="Path to the tracking output directory.",
+        default="./output/")
+    return parser.parse_args()
+
+def main(yolo, sequence_file, output_dir):
+    # Compute output file
+    output_seq = './output/' + os.path.splitext(os.path.basename(sequence_file))[0] + '.avi'
 
    # Definition of the parameters
     max_cosine_distance = 0.3
@@ -35,16 +48,15 @@ def main(yolo):
     tracker = Tracker(metric)
 
     writeVideo_flag = True 
-    
-    video_capture = cv2.VideoCapture('./training_set/MOT16-08.mp4')
-    #video_capture = cv2.VideoCapture(0)
+
+    video_capture = cv2.VideoCapture(sequence_file)
 
     if writeVideo_flag:
     # Define the codec and create VideoWriter object
         w = int(video_capture.get(3))
         h = int(video_capture.get(4))
         fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-        out = cv2.VideoWriter('output.avi', fourcc, 15, (w, h))
+        out = cv2.VideoWriter(output_seq, fourcc, 11, (w, h))
         list_file = open('detection.txt', 'w')
         frame_index = -1 
         
@@ -111,4 +123,6 @@ def main(yolo):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    main(YOLO())
+    # Parse user provided arguments
+    args = parse_args()
+    main(YOLO(), args.sequence_file, args.output_dir)
