@@ -15,7 +15,7 @@ from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
 from tools import generate_detections as gdet
 from deep_sort.detection import Detection as ddet
-#warnings.filterwarnings('ignore')
+warnings.filterwarnings('ignore')
 
 import argparse
 
@@ -25,13 +25,13 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Deep SORT")
     parser.add_argument(
         "--sequence_file", help="Path to input sequence",
-        default=0)
+        default = 0)
     parser.add_argument(
-        "--output_dir", help="Path to the tracking output directory.",
-        default="./output/")
+        "--fps", help="Frames per second.",
+        default = 11)
     return parser.parse_args()
 
-def main(yolo, sequence_file, output_dir):
+def main(yolo, sequence_file, fps):
     # Compute output file
     output_seq = './output/' + os.path.splitext(os.path.basename(sequence_file))[0] + '.avi'
 
@@ -125,4 +125,4 @@ def main(yolo, sequence_file, output_dir):
 if __name__ == '__main__':
     # Parse user provided arguments
     args = parse_args()
-    main(YOLO(), args.sequence_file, args.output_dir)
+    main(YOLO(), args.sequence_file, args.fps)
