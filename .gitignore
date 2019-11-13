@@ -1,5 +1,7 @@
 # User defined ignore files
 
+
+*.txt
 # Keras model weights
 *.h5
 
