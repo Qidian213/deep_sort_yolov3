@@ -2,7 +2,9 @@ QQ group: 姿态检测＆跟踪 781184396
 
 # Some excellent related work
    1, https://github.com/xingyizhou/CenterTrack
+   
    2, https://github.com/phil-bergmann/tracking_wo_bnw
+   
    3, https://github.com/Zhongdao/Towards-Realtime-MOT
 
 # Introduction
