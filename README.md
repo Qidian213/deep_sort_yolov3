@@ -6,6 +6,8 @@ QQ group: 姿态检测＆跟踪 781184396
    2, https://github.com/phil-bergmann/tracking_wo_bnw
    
    3, https://github.com/Zhongdao/Towards-Realtime-MOT
+   
+   4, https://github.com/ifzhang/FairMOT
 
 # Introduction
   Thanks for these projects, this work now is support tiny_yolo v3 but only for test, if you want to train you can either train a model in darknet or in the second following works. It also can tracks many objects in coco classes, so please note to modify the classes in yolo.py. besides, you also can use camera for testing.
