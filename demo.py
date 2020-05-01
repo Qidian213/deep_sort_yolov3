@@ -56,12 +56,13 @@ def main(yolo):
 
        # image = Image.fromarray(frame)
         image = Image.fromarray(frame[...,::-1]) #bgr to rgb
-        boxs = yolo.detect_image(image)
+        boxs = yolo.detect_image(image)[0]
+        confidence = yolo.detect_image(image)[1]
        # print("box_num",len(boxs))
         features = encoder(frame,boxs)
         
         # score to 1.0 here).
-        detections = [Detection(bbox, 1.0, feature) for bbox, feature in zip(boxs, features)]
+        detections = [Detection(bbox, confidence, feature) for bbox, confidence, feature in zip(boxs, confidence, features)]
         
         # Run non-maxima suppression.
         boxes = np.array([d.tlwh for d in detections])
@@ -82,7 +83,9 @@ def main(yolo):
 
         for det in detections:
             bbox = det.to_tlbr()
+            score = "%.2f" % round(det.confidence * 100, 2)
             cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,0,0), 2)
+            cv2.putText(frame, score + '%', (int(bbox[0]), int(bbox[3])), 0, 5e-3 * 200, (0,255,0),2)
             
         cv2.imshow('', frame)
         
