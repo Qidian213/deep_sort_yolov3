@@ -2,129 +2,170 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division, print_function, absolute_import
-
+import os
+import datetime
 from timeit import time
 import warnings
 import cv2
 import numpy as np
+import argparse
 from PIL import Image
 from yolo import YOLO
-
 from deep_sort import preprocessing
 from deep_sort import nn_matching
 from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
 from tools import generate_detections as gdet
-import imutils.video
-from videocaptureasync import VideoCaptureAsync
+from deep_sort.detection import Detection as ddet
+from collections import deque
+from keras import backend
 
+backend.clear_session()
+ap = argparse.ArgumentParser()
+ap.add_argument("-i", "--input",help="path to input video", default = "./test_video/test.avi")
+ap.add_argument("-c", "--class",help="name of class", default = "person")
+args = vars(ap.parse_args())
+
+pts = [deque(maxlen=30) for _ in range(9999)]
 warnings.filterwarnings('ignore')
+
+# initialize a list of colors to represent each possible class label
+np.random.seed(100)
+COLORS = np.random.randint(0, 255, size=(200, 3),
+	dtype="uint8")
 
 def main(yolo):
 
-    # Definition of the parameters
-    max_cosine_distance = 0.3
+    start = time.time()
+    #Definition of the parameters
+    max_cosine_distance = 0.5 #余弦距离的控制阈值
     nn_budget = None
-    nms_max_overlap = 1.0
-    
-    # Deep SORT
-    model_filename = 'model_data/mars-small128.pb'
+    nms_max_overlap = 0.3 #非极大抑制的阈值
+
+    counter = []
+    #deep_sort
+    model_filename = 'model_data/market1501.pb'
     encoder = gdet.create_box_encoder(model_filename,batch_size=1)
-    
+
     metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
     tracker = Tracker(metric)
 
     writeVideo_flag = True
-    asyncVideo_flag = False
-
-    file_path = 'video.webm'
-    if asyncVideo_flag :
-        video_capture = VideoCaptureAsync(file_path)
-    else:
-        video_capture = cv2.VideoCapture(file_path)
-
-    if asyncVideo_flag:
-        video_capture.start()
+    #video_path = "./output/output.avi"
+    video_capture = cv2.VideoCapture(args["input"])
 
     if writeVideo_flag:
-        if asyncVideo_flag:
-            w = int(video_capture.cap.get(3))
-            h = int(video_capture.cap.get(4))
-        else:
-            w = int(video_capture.get(3))
-            h = int(video_capture.get(4))
-        fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        out = cv2.VideoWriter('output_yolov3.avi', fourcc, 30, (w, h))
+    # Define the codec and create VideoWriter object
+        w = int(video_capture.get(3))
+        h = int(video_capture.get(4))
+        fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+        out = cv2.VideoWriter('./output/'+args["input"][43:57]+ "_" + args["class"] + '_output.avi', fourcc, 15, (w, h))
+        list_file = open('detection.txt', 'w')
         frame_index = -1
 
     fps = 0.0
-    fps_imutils = imutils.video.FPS().start()
 
     while True:
+
         ret, frame = video_capture.read()  # frame shape 640*480*3
         if ret != True:
-             break
-
+            break
         t1 = time.time()
 
-        image = Image.fromarray(frame[...,::-1])  # bgr to rgb
-        boxs = yolo.detect_image(image)[0]
-        confidence = yolo.detect_image(image)[1]
-
+       # image = Image.fromarray(frame)
+        image = Image.fromarray(frame[...,::-1]) #bgr to rgb
+        boxs,class_names = yolo.detect_image(image)
         features = encoder(frame,boxs)
-
-        detections = [Detection(bbox, confidence, feature) for bbox, confidence, feature in zip(boxs, confidence, features)]
-        
+        # score to 1.0 here).
+        detections = [Detection(bbox, 1.0, feature) for bbox, feature in zip(boxs, features)]
         # Run non-maxima suppression.
         boxes = np.array([d.tlwh for d in detections])
         scores = np.array([d.confidence for d in detections])
         indices = preprocessing.non_max_suppression(boxes, nms_max_overlap, scores)
         detections = [detections[i] for i in indices]
-        
+
         # Call the tracker
         tracker.predict()
         tracker.update(detections)
-        
-        for track in tracker.tracks:
-            if not track.is_confirmed() or track.time_since_update > 1:
-                continue 
-            bbox = track.to_tlbr()
-            cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,255,255), 2)
-            cv2.putText(frame, str(track.track_id),(int(bbox[0]), int(bbox[1])),0, 5e-3 * 200, (0,255,0),2)
 
+        i = int(0)
+        indexIDs = []
+        c = []
+        boxes = []
         for det in detections:
             bbox = det.to_tlbr()
-            score = "%.2f" % round(det.confidence * 100, 2)
-            cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,0,0), 2)
-            cv2.putText(frame, score + '%', (int(bbox[0]), int(bbox[3])), 0, 5e-3 * 130, (0,255,0),2)
-            
-        cv2.imshow('', frame)
+            cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,255,255), 2)
 
-        if writeVideo_flag: # and not asyncVideo_flag:
-            # save a frame
+        for track in tracker.tracks:
+            if not track.is_confirmed() or track.time_since_update > 1:
+                continue
+            #boxes.append([track[0], track[1], track[2], track[3]])
+            indexIDs.append(int(track.track_id))
+            counter.append(int(track.track_id))
+            bbox = track.to_tlbr()
+            color = [int(c) for c in COLORS[indexIDs[i] % len(COLORS)]]
+
+            cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(color), 3)
+            cv2.putText(frame,str(track.track_id),(int(bbox[0]), int(bbox[1] -50)),0, 5e-3 * 150, (color),2)
+            if len(class_names) > 0:
+               class_name = class_names[0]
+               cv2.putText(frame, str(class_names[0]),(int(bbox[0]), int(bbox[1] -20)),0, 5e-3 * 150, (color),2)
+
+            i += 1
+            #bbox_center_point(x,y)
+            center = (int(((bbox[0])+(bbox[2]))/2),int(((bbox[1])+(bbox[3]))/2))
+            #track_id[center]
+            pts[track.track_id].append(center)
+            thickness = 5
+            #center point
+            cv2.circle(frame,  (center), 1, color, thickness)
+
+	    #draw motion path
+            for j in range(1, len(pts[track.track_id])):
+                if pts[track.track_id][j - 1] is None or pts[track.track_id][j] is None:
+                   continue
+                thickness = int(np.sqrt(64 / float(j + 1)) * 2)
+                cv2.line(frame,(pts[track.track_id][j-1]), (pts[track.track_id][j]),(color),thickness)
+                #cv2.putText(frame, str(class_names[j]),(int(bbox[0]), int(bbox[1] -20)),0, 5e-3 * 150, (255,255,255),2)
+
+        count = len(set(counter))
+        cv2.putText(frame, "Total Object Counter: "+str(count),(int(20), int(120)),0, 5e-3 * 200, (0,255,0),2)
+        cv2.putText(frame, "Current Object Counter: "+str(i),(int(20), int(80)),0, 5e-3 * 200, (0,255,0),2)
+        cv2.putText(frame, "FPS: %f"%(fps),(int(20), int(40)),0, 5e-3 * 200, (0,255,0),3)
+        cv2.namedWindow("YOLO3_Deep_SORT", 0);
+        cv2.resizeWindow('YOLO3_Deep_SORT', 1024, 768);
+        cv2.imshow('YOLO3_Deep_SORT', frame)
+
+        if writeVideo_flag:
+            #save a frame
             out.write(frame)
             frame_index = frame_index + 1
+            list_file.write(str(frame_index)+' ')
+            if len(boxs) != 0:
+                for i in range(0,len(boxs)):
+                    list_file.write(str(boxs[i][0]) + ' '+str(boxs[i][1]) + ' '+str(boxs[i][2]) + ' '+str(boxs[i][3]) + ' ')
+            list_file.write('\n')
+        fps  = ( fps + (1./(time.time()-t1)) ) / 2
+        #print(set(counter))
 
-        fps_imutils.update()
-
-        fps = (fps + (1./(time.time()-t1))) / 2
-        print("FPS = %f"%(fps))
-        
         # Press Q to stop!
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+    print(" ")
+    print("[Finish]")
+    end = time.time()
 
-    fps_imutils.stop()
-    print('imutils FPS: {}'.format(fps_imutils.fps()))
+    if len(pts[track.track_id]) != None:
+       print(args["input"][43:57]+": "+ str(count) + " " + str(class_name) +' Found')
 
-    if asyncVideo_flag:
-        video_capture.stop()
     else:
-        video_capture.release()
+       print("[No Found]")
+
+    video_capture.release()
 
     if writeVideo_flag:
         out.release()
-
+        list_file.close()
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
