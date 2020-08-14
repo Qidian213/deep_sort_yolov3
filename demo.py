@@ -68,7 +68,8 @@ def main(yolo):
         t1 = time.time()
 
         image = Image.fromarray(frame[...,::-1])  # bgr to rgb
-        boxs,confidence = yolo.detect_image(image)
+        boxs = yolo.detect_image(image)[0]
+        confidence = yolo.detect_image(image)[1]
 
         features = encoder(frame,boxs)
 
