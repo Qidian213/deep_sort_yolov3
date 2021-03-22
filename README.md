@@ -1,5 +1,7 @@
 QQ group: 姿态检测＆跟踪 781184396
 
+注意： 本代码创建时间较为久远，软件版本较老，很多模块功能不够高效，功能简单。 推荐使用别的作者实现的Pytorch版本等。
+
 # Some excellent related work
    1, https://github.com/xingyizhou/CenterTrack
    
